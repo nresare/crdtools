@@ -6,17 +6,13 @@ java_junit5_test(
         "*Test.java",
     ]),
     deps = [
-        "//src/main/java/com/gs/crdtools:spec-extractor",
-        "//src/main/java/com/gs/crdtools:openapi-src-genner",
-        "//src/main/java/com/gs/crdtools:gen-source-from-spec",
         "//src/main/java/com/gs/crdtools/codegen:swagger-codegen-extensions",
-        "@maven//:io_vavr_vavr",
-        "@bazel_tools//tools/java/runfiles"
+        "//src/main/java/com/gs/crdtools:gen-source-from-spec",
+        "@bazel_tools//tools/java/runfiles",
     ],
-    test_package = "com.gs.crdtools",
+    test_package = "com.gs.crdtools.codegen",
     size = "small",
     data = [
         "//src/test/resources:all",
     ],
 )
-

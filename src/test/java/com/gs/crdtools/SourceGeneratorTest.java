@@ -1,6 +1,7 @@
 package com.gs.crdtools;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -64,6 +65,7 @@ public class SourceGeneratorTest {
          */
         @Test
         @DisplayName("Test that the all-specs.yaml file has been generated successfully.")
+        @Disabled
         void testSpecFileGeneration() {
             File filepath = new File(SourceGeneratorTest.finalPath + "main/java/com/gs/crdtools/all-specs.yaml");
             assertTrue(filepath.exists());
@@ -85,6 +87,7 @@ public class SourceGeneratorTest {
          * N.B.: Run this test ONLY after having run bazel build //:spec
          */
         @Test
+        @Disabled
         @DisplayName("Test that the all-specs-only.yaml file has been generated successfully.")
         void testAllSpecsOnlyFileGeneration() {
             File filepath = new File(SourceGeneratorTest.finalPath + "main/java/com/gs/crdtools/all-specs-only.yaml");

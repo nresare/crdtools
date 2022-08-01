@@ -69,3 +69,16 @@ genrule(
         "gen-source-from-spec",
     ],
 )
+
+java_library(
+    name = "kccapi",
+    srcs = ["kcc-java-genned"],
+    deps = [
+        ":base-object",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:javax_validation_validation_api",
+        "//src/main/java/org/springframework/validation/annotation:validation-stub",
+        "@maven//:io_swagger_core_v3_swagger_annotations",
+        "@maven//:io_kubernetes_client_java_api",
+    ]
+)

@@ -57,7 +57,7 @@ public class SourceGenFromSpec {
                 .setInputSpec(specs)
                 .setLang(CrdtoolsCodegen.class.getCanonicalName())
                 .setOutputDir(tmpOutputDir.toAbsolutePath().toString())
-                .setModelPackage("kccapi")
+                .setModelPackage("com.gs.crdtools")
                 // CodegenConfigurator modifies its Map arguments, so we need to wrap it in something mutable
                 .setAdditionalProperties(mutable(Map.of(
                         "java8", true,

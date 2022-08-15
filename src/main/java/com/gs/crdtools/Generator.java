@@ -13,20 +13,25 @@ import static com.gs.crdtools.SourceGenFromSpec.toZip;
 public class Generator {
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
-            throw new IllegalArgumentException("Usage: Generator GENERATED_SRC_ZIP CRD_YAML [CRD_YAML...]");
+            throw new IllegalArgumentException("Usage: Generator -o GENERATED_SRC_ZIP -p PACKAGE_NAME -i CRD_YAML [CRD_YAML...]");
         }
-        var crds = parseCrds(List.of(args).subSequence(1).map(Path::of));
-        var result = generate(crds);
-        toZip(result, Path.of(args[0]));
+
+        var argsParser = new CrdToolsArgsParser();
+        argsParser.parseArgs(args);
+
+        var crdsList = parseCrds(argsParser.getArgs().getCrdsPaths().map(Path::of));
+        var result = generate(crdsList, argsParser.getArgs().getPackageName());
+
+        toZip(result, Path.of(argsParser.getArgs().getOutputPath()));
     }
 
     static List<YAMLValue> parseCrds(List<Path> inputs) {
         return inputs.flatMap(YAMLUtil::allFromPath);
     }
 
-    static Map<Path, String> generate(List<YAMLValue> crds) throws IOException {
+    static Map<Path, String> generate(List<YAMLValue> crds, String packageName) throws IOException {
         var specs = SourceGenFromSpec.extractSpecs(crds);
-        return SourceGenFromSpec.generateSourceCodeFromSpecs(specs);
+        return SourceGenFromSpec.generateSourceCodeFromSpecs(specs, packageName);
     }
 
 }

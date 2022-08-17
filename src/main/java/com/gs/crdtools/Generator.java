@@ -16,13 +16,12 @@ public class Generator {
             throw new IllegalArgumentException("Usage: Generator -o GENERATED_SRC_ZIP -p PACKAGE_NAME -i CRD_YAML [CRD_YAML...]");
         }
 
-        var argsParser = new CrdToolsArgsParser();
-        argsParser.parseArgs(args);
+        var parsed = CrdToolsArgsParser.parseArgs(args);
 
-        var crdsList = parseCrds(argsParser.getArgs().getCrdsPaths().map(Path::of));
-        var result = generate(crdsList, argsParser.getArgs().getPackageName());
+        var crdsList = parseCrds(parsed.crdPaths().map(Path::of));
+        var result = generate(crdsList, parsed.packageName());
 
-        toZip(result, Path.of(argsParser.getArgs().getOutputPath()));
+        toZip(result, Path.of(parsed.outputPath()));
     }
 
     static List<YAMLValue> parseCrds(List<Path> inputs) {

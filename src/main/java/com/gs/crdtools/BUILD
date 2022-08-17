@@ -14,7 +14,6 @@ java_library(
 java_library(
     name = "spec-extractor",
     srcs = ["SpecExtractorHelper.java"],
-    resources = ["@k8s-config-connector//:install-bundles/install-bundle-workload-identity/crds.yaml"],
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/java/com/gs/crdtools:vavr-helpers",

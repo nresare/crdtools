@@ -2,69 +2,69 @@ package com.gs.crdtools;
 
 import io.vavr.collection.List;
 
+import java.util.Arrays;
+
 /**
  * A class listing all the possible arguments for the CRDTools tool.
  */
-class CrdToolsArgs {
+record CrdToolsArgs(List<String> crdPaths, String packageName, String outputPath) {
 
-    List<String> crdsPaths;
-    String packageName;
-    String outputPath;
+    static final String INPUT_ARG = "-i";
+    static final String OUTPUT_ARG = "-o";
+    static final String PACKAGE_ARG = "-p";
+    public static final String DEFAULT_TARGET_PACKAGE = "com.gs.crdtools.generated";
+    public static final String DEFAULT_OUTPUT = "generated.srcjar";
+    public static final String MY_DEFAULT_VALUE = "MY DEFAULT VALUE";
 
     /**
-     * Set default values for all the arguments.
+     * Parse the given arguments.
+     * @param args The arguments to parse.
      */
-    protected void populateDefault() {
-        this.crdsPaths = List.empty();
-        this.packageName = "com.gs.crdtools.generated";
-        this.outputPath = "generated.srcjar";
+    public static CrdToolsArgs CrdToolsArgs(String[] args) {
+        int parseIndex = 0;
+        List<String> crdPaths = List.empty();
+        String packageName = DEFAULT_TARGET_PACKAGE;
+        String outputPath = DEFAULT_OUTPUT;
+
+        while (hasNext(args, parseIndex) != -1) {
+            String currentArg = args[parseIndex];
+
+            switch (currentArg) {
+                case INPUT_ARG -> crdPaths = getCrdsList(args, parseIndex);
+                case PACKAGE_ARG -> packageName = args[parseIndex + 1];
+                case OUTPUT_ARG -> outputPath = args[parseIndex + 1];
+            }
+            parseIndex++;
+        }
+        return new CrdToolsArgs(crdPaths, packageName, outputPath);
     }
 
     /**
-     * Set the package name for the generated source code.
-     * @param packageName The package name for the generated source code.
+     * Find the next argument in the list and return its index.
+     * Return -1 if there are no more arguments.
+     * @param args The list of arguments to search.
+     * @return The index of the next argument in the list, or -1 if none.
      */
-    protected void setPackageName(String packageName) {
-        this.packageName = packageName;
+    protected static int hasNext(String[] args, int index) {
+        int i = index + 1;
+        while (i < args.length) {
+            if (args[i].startsWith("-")) {
+                return i;
+            } else if (i == args.length - 1) {
+                return i + 1;
+            }
+            i++;
+        }
+        return -1;
     }
 
     /**
-     * Set the output path for the generated source code.
-     * @param outputPath The output path for the generated source code.
+     * Get the values for the input argument.
+     * @param args The list of arguments to search.
+     * @return The values for the input argument.
      */
-    protected void setOutputPath(String outputPath) {
-        this.outputPath = outputPath;
+    protected static List<String> getCrdsList(String[] args, int index) {
+        return List.of(Arrays.copyOfRange(args, index + 1, hasNext(args, index)));
     }
 
-    /**
-     * Set the list of input CRDs to use for the generator.
-     * @param crdsPaths The list of input CRDs to use for the generator.
-     */
-    protected void setCrdsPaths(String[] crdsPaths) {
-        this.crdsPaths = List.of(crdsPaths);
-    }
-
-    /**
-     * Get the list of input CRDs to use for the generator.
-     * @return The list of input CRDs to use for the generator.
-     */
-    public List<String> getCrdsPaths() {
-        return this.crdsPaths;
-    }
-
-    /**
-     * Get the package name for the generated source code.
-     * @return The package name for the generated source code.
-     */
-    public String getPackageName() {
-        return this.packageName;
-    }
-
-    /**
-     * Get the output path for the generated source code.
-     * @return The output path for the generated source code.
-     */
-    public String getOutputPath() {
-        return this.outputPath;
-    }
 }
